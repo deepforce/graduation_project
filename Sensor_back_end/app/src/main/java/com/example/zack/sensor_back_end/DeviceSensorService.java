@@ -83,6 +83,7 @@ public class DeviceSensorService extends Service {
         Log.i(TAG, "Zack onStartCommand");
         class senThread implements Runnable {
             private MyThead myThead;
+            private int first = 0;
             public void run() {
                 Log.d("DeviceSensorService", "executed at " + new Date().
                         toString());
@@ -125,41 +126,51 @@ public class DeviceSensorService extends Service {
 
 
 
-                while (true) {
+
+                while (MainActivity.flag_stop) {
 
                     try {
-//
 
                         initializeAudio();
                         recordering = true;
-                        sm.registerListener(mySensorListener, sensorAcc,
-                                SensorManager.SENSOR_DELAY_NORMAL); //以普通采样率注册监听器
-                        sm.registerListener(mySensorListener, sensoGyros,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoPress,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoOri,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoMag,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoGra,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoLinear,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoTemp,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-                        sm.registerListener(mySensorListener, sensoLight,
-                                SensorManager.SENSOR_DELAY_NORMAL);
-
+//                        if (first % 2 == 0) {
+                            sm.registerListener(mySensorListener, sensorAcc,
+                                    SensorManager.SENSOR_DELAY_NORMAL); //以普通采样率注册监听器
+                            sm.registerListener(mySensorListener, sensoGyros,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoPress,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoOri,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoMag,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoGra,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoLinear,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoTemp,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+                            sm.registerListener(mySensorListener, sensoLight,
+                                    SensorManager.SENSOR_DELAY_NORMAL);
+//                        }
                         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                         m_wklk = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, DeviceSensorService.class.getName());
                         m_wklk.acquire();
+
+
                         myThead = new MyThead();
                         Thread au_thread = new Thread(myThead);
                         au_thread.start();
+
+
+
                         Thread.sleep(30 * 1000);  // 延迟30秒
+                        audioRecord.stop();
+                        audioRecord.release();
+                        audioRecord = null;
                         recordering = false;
                         sm.unregisterListener(mySensorListener);
+//                        first++;
                         Thread.sleep(10 * 60 * 1000); // 两次收集间隔时间
                     } catch (InterruptedException e) {
                         System.out.println(e.getMessage());
@@ -221,6 +232,7 @@ public class DeviceSensorService extends Service {
             m_wklk.release();
             m_wklk = null;
         }
+        //Thread.interrupted();
 
 
 
@@ -242,7 +254,7 @@ public class DeviceSensorService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        while (recordering == true) {
+        while (recordering) {
             final int readsize = audioRecord.read(audiodata, 0, bufferSizeInBytes);
             if (AudioRecord.ERROR_INVALID_OPERATION != readsize) {
                 try {

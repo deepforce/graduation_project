@@ -25,6 +25,7 @@ public class MainActivity extends Activity
 {
     private Button startBtn;
     private Button stopBtn;
+    public static boolean flag_stop;
     public static int count;
 
     private CreateUserPopWin createUserPopWin;
@@ -56,11 +57,13 @@ public class MainActivity extends Activity
                     new AlertDialog.Builder(MainActivity.this).setTitle("消息")//设置对话框标题
                             .setMessage("开始收集！")//设置显示的内容
                     .show();//在按键响应事件中显示此对话框
+                    flag_stop = true;
                     startService(intent);
                     break;
                 case R.id.stopBtn:
                     showEditPopWin();
                     System.out.println("Stop DeviceSensor service...");
+                    flag_stop = false;
                     stopService(intent);
                     break;
                 default:
@@ -91,9 +94,10 @@ public class MainActivity extends Activity
                     writeUserprofile(name1, mobile1, info1);
 
                     createUserPopWin.dismiss();
-                    Thread.interrupted();
-                    DeviceSensorService.thread.interrupt();
-                    DeviceSensorService.thread.stop();
+                    finish();
+//                    Thread.interrupted();
+//                    DeviceSensorService.thread.interrupt();
+//                    DeviceSensorService.thread.stop();
                     break;
             }
         }
