@@ -155,13 +155,12 @@ public class DeviceSensorService extends Service {
                         m_wklk = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, DeviceSensorService.class.getName());
                         m_wklk.acquire();
                         myThead = new MyThead();
-                        Thread thread = new Thread(myThead);
-                        thread.start();
-                        Thread.sleep(5000);  // 延迟5秒
+                        Thread au_thread = new Thread(myThead);
+                        au_thread.start();
+                        Thread.sleep(30 * 1000);  // 延迟30秒
                         recordering = false;
-                        thread.sleep(10 * 1000);
                         sm.unregisterListener(mySensorListener);
-                        Thread.sleep(10 * 1000); // 两次收集间隔时间
+                        Thread.sleep(10 * 60 * 1000); // 两次收集间隔时间
                     } catch (InterruptedException e) {
                         System.out.println(e.getMessage());
                         //break;
