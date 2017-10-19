@@ -26,4 +26,21 @@
         android:id="@+id/stopBtn"
         android:layout_below="@+id/startBtn"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_time_record"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:hint="请输入录制时间(单位：秒)" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_time_interval"
+        android:layout_below="@+id/text_time_record"
+        android:layout_centerHorizontal="true"
+        android:hint="请输入间隔时间(单位：秒)" />
+
 </RelativeLayout>

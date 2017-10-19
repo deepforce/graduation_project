@@ -164,14 +164,14 @@ public class DeviceSensorService extends Service {
 
 
 
-                        Thread.sleep(30 * 1000);  // 延迟30秒
+                        Thread.sleep(MainActivity.time_record * 1000);  // 延迟30秒
                         audioRecord.stop();
                         audioRecord.release();
                         audioRecord = null;
                         recordering = false;
                         sm.unregisterListener(mySensorListener);
 //                        first++;
-                        Thread.sleep(10 * 60 * 1000); // 两次收集间隔时间
+                        Thread.sleep(MainActivity.time_interval * 1000); // 两次收集间隔时间
                     } catch (InterruptedException e) {
                         System.out.println(e.getMessage());
                         //break;
